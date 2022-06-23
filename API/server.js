@@ -39,9 +39,14 @@ const User = sequelize.define(
     }
 );
 
-server.get("/users", async(req, res) => {
+server.get("/users", async (req, res) => {
     const user = await User.findAll();
-    console.log(user);
+    res.status(200).json(user)
+})
+
+server.get("/users/:id", async (req, res) => {
+    const id = req.params.id;
+    const user = await User.findByPk(id)
     res.status(200).json(user)
 })
 
@@ -54,6 +59,29 @@ server.post("/user", (req, res) => {
     });
 });
 
+server.patch("/users/:id", async (req, res) => {
+    const { firstName, lastName } = req.body;
+    const id = req.params.id;
+    try {
+        const result = await User.update(
+            { firstName, lastName },
+            { where: { id: id } }
+        );
+        res.json(result);
+    } catch (error) {
+        res.json(error.message)
+    }
+});
+
+server.delete("/users/:id", async(req, res) => {
+    const id = req.params.id;
+    try{
+        await User.destroy({where: {id: id}})
+        res.json({message: "User deleted!"})
+    }catch(error){
+        res.json({error: error})
+    }
+})
 
 server.get("/", (req, res) => {
     res.json({ message: "Server started!" });
