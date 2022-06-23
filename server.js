@@ -3,6 +3,9 @@ const cors = require("cors");
 const server = express();
 const port = 8080;
 
+server.use(cors());
+server.use(express.json());
+
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize("test", "root", "root", {
@@ -37,7 +40,7 @@ const User = sequelize.define(
 );
 
 server.post("/user", (req, res) => {
-    const { firstName, lastName } = req.body;
+    const {firstName, lastName} = req.body;
     User.create({firstName, lastName}).then(() => {
         res.json({message: "User created successfully"})
     }).catch(err => {
@@ -45,8 +48,6 @@ server.post("/user", (req, res) => {
     });
 });
 
-server.use(cors());
-server.use(express.json());
 
 server.get("/", (req, res) => {
   res.json({ message: "Server started!" });
