@@ -1,4 +1,4 @@
 # API
 
-# Create an API to use with database mysql
+Create an API to use with mysql database
  
